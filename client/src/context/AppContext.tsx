@@ -77,7 +77,21 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const value = {};
+  const value = {
+    user,
+    setUser,
+    isUserFetched,
+    fetchUser,
+    signup,
+    login,
+    logout,
+    onboardingCompleted,
+    setOnboardingCompleted,
+    allFoodLogs,
+    allActivityLogs,
+    setAllFoodLogs,
+    setAllActivityLogs,
+  };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
