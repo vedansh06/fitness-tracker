@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   initialState,
   type ActivityEntry,
@@ -46,6 +46,36 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
     setIsUserFetched(true);
   };
+
+  const fetchFoodLogs = async () => {
+    const { data } = await mockApi.foodLogs.list();
+    setAllFoodLogs(data);
+  };
+
+  const fetchActivityLogs = async () => {
+    const { data } = await mockApi.activityLogs.list();
+    setAllActivityLogs(data);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setOnboardingCompleted(false);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      (async () => {
+        await fetchUser(token);
+        await fetchFoodLogs();
+        await fetchActivityLogs();
+      })();
+    } else {
+      setIsUserFetched(true);
+    }
+  }, []);
 
   const value = {};
 
