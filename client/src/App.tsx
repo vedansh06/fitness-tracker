@@ -6,12 +6,18 @@ import ActivityLog from "./pages/ActivityLog";
 import Profile from "./pages/Profile";
 import { useAppContext } from "./context/AppContext";
 import Login from "./pages/Login";
+import Loading from "./components/Loading";
+import Onboarding from "./pages/Onboarding";
 
 const App = () => {
   const { user, isUserFetched, onboardingCompleted } = useAppContext();
 
   if (!user) {
-    return isUserFetched ? <Login /> : <p>Loading</p>;
+    return isUserFetched ? <Login /> : <Loading />;
+  }
+
+  if (!onboardingCompleted) {
+    return <Onboarding />;
   }
 
   return (

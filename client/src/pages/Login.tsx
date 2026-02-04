@@ -20,6 +20,17 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, signup, user } = useAppContext();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    if (state === "login") {
+      await login({ email, password });
+    } else {
+      await signup({ username, email, password });
+    }
+    setIsSubmitting(false);
+  };
+
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -29,7 +40,7 @@ const Login = () => {
   return (
     <>
       <main className="login-page-container">
-        <form className="login-form">
+        <form onSubmit={handleSubmit} className="login-form">
           <h2 className="text-3xl font-medium text-gray-900 dark:text-white">
             {state === "login" ? "Sign In" : "Sign Up"}
           </h2>
