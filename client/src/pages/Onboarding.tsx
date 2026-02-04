@@ -1,8 +1,9 @@
-import { PersonStanding } from "lucide-react";
+import { PersonStanding, User } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 import type { ProfileFormData } from "../types";
+import Input from "../components/ui/Input";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -17,6 +18,13 @@ const Onboarding = () => {
   });
 
   const totalSteps = 3;
+
+  const updateField = (
+    field: keyof ProfileFormData,
+    value: string | number,
+  ) => {
+    setFormData({ ...formData, [field]: value });
+  };
 
   return (
     <>
@@ -48,6 +56,38 @@ const Onboarding = () => {
           <p className="text-sm text-slate-400 mt-3">
             Step {step} of {totalSteps}{" "}
           </p>
+        </div>
+        {/* Form Content */}
+        <div className="flex-1 px-6 onboarding-wrapper">
+          {step === 1 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="size-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 flex items-center justify-center">
+                  <User className="size-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
+                    How old are you?
+                  </h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">
+                    This helps us calculate your needs
+                  </p>
+                </div>
+              </div>
+              <Input
+                label="Age"
+                type="number"
+                className="max-w-2xl"
+                value={formData.age}
+                onChange={(v) => updateField("age", v)}
+                placeholder="Enter your age"
+                min={13}
+                max={120}
+                required
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
