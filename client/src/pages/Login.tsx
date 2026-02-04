@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 
 const Login = () => {
-  const [state, setState] = useState("sign up");
+  const [state, setState] = useState("login");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -104,6 +104,41 @@ const Login = () => {
               </button>
             </div>
           </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="login-button">
+            {isSubmitting
+              ? "Signing in..."
+              : state === "login"
+                ? "Login"
+                : "Sign Up"}
+          </button>
+
+          {state === "login" ? (
+            <p
+              className="text-center py-6
+             text-sm text-gray-500 dark:text-gray-400">
+              Don't have an account?{" "}
+              <button
+                onClick={() => setState("sign-up")}
+                className="ml-1 cursor-pointer text-green-600 hover:underline">
+                Sign Up
+              </button>
+            </p>
+          ) : (
+            <p
+              className="text-center py-6
+             text-sm text-gray-500 dark:text-gray-400">
+              Already have an account?{" "}
+              <button
+                onClick={() => setState("login")}
+                className="ml-1 cursor-pointer text-green-600 hover:underline">
+                Login
+              </button>
+            </p>
+          )}
         </form>
       </main>
     </>
