@@ -4,7 +4,14 @@ import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry, FoodEntry } from "../types";
 import Card from "../components/ui/Card";
 import ProgressBar from "../components/ui/ProgressBar";
-import { Activity, FlameIcon, HamburgerIcon, Zap } from "lucide-react";
+import {
+  Activity,
+  FlameIcon,
+  HamburgerIcon,
+  ScaleIcon,
+  TrendingUpIcon,
+  Zap,
+} from "lucide-react";
 
 const Dashboard = () => {
   const { user, allActivityLogs, allFoodLogs } = useAppContext();
@@ -183,6 +190,42 @@ const Dashboard = () => {
             <p className="text-sm text-slate-400">activities logged</p>
           </Card>
         </div>
+
+        {/* Goal Card */}
+        {user && ( // This card will span both columns on large screens
+          <Card className="bg-linear-to-r from-slate-800 to-slate-700">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                <TrendingUpIcon className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-slate-400 text-sm">Your Goal</p>
+                <p className="text-white font-semibold capitalize">
+                  {user.goal === "lose" && "🔥 Lose Weight"}
+                  {user.goal === "maintain" && "⚖️ Maintain Weight"}
+                  {user.goal === "gain" && "💪 Gain Muscle"}
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Body Metrics Card */}
+        {user && user.weight && (
+          <Card>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
+                <ScaleIcon className="w-6 h-6 text-indigo-500" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-800 dark:text-white">
+                  Body Metrics
+                </h3>
+                <p className="text-slate-500 text-sm">Your stats</p>
+              </div>
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );
