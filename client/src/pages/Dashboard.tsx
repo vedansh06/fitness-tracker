@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry, FoodEntry } from "../types";
 import Card from "../components/ui/Card";
 import ProgressBar from "../components/ui/ProgressBar";
-import { FlameIcon, HamburgerIcon } from "lucide-react";
+import { Activity, FlameIcon, HamburgerIcon, Zap } from "lucide-react";
 
 const Dashboard = () => {
   const { user, allActivityLogs, allFoodLogs } = useAppContext();
@@ -152,6 +152,37 @@ const Dashboard = () => {
             max={user?.dailyCalorieBurn || 400}
           />
         </Card>
+
+        {/* States Row */}
+        <div className="dashboard-card-grid">
+          {/* Active Minutes */}
+          <Card>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                <Activity className="w-5 h-5 text-blue-500" />
+              </div>
+              <p className="text-sm text-slate-500">Active</p>
+            </div>
+            <p className="text-2xl font-bold text-slate-800 dark:text-white">
+              {totalActiveMinutes}
+            </p>
+            <p className="text-sm text-slate-400">minutes today</p>
+          </Card>
+
+          {/* Activities Count */}
+          <Card>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-purple-500" />
+              </div>
+              <p className="text-sm text-slate-500">Workouts</p>
+            </div>
+            <p className="text-2xl font-bold text-slate-800 dark:text-white">
+              {todayActivities.length}
+            </p>
+            <p className="text-sm text-slate-400">activities logged</p>
+          </Card>
+        </div>
       </div>
     </div>
   );
