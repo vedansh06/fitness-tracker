@@ -314,6 +314,42 @@ const Dashboard = () => {
             </div>
           </Card>
         )}
+
+        {/* Quick Summary */}
+        <Card>
+          <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
+            Today's Summary
+          </h3>
+
+          <div className="space-y-3">
+            <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400">
+                Meals logged
+              </span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">
+                {todayFood.length}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400">
+                Total calories
+              </span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">
+                {totalCalories} kcal
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center py-2">
+              <span className="text-slate-500 dark:text-slate-400">
+                Active time
+              </span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">
+                {totalActiveMinutes} mins
+              </span>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   );
