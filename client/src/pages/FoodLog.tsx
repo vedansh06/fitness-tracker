@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FormData } from "../types";
 import Card from "../components/ui/Card";
-import { quickActivitiesFoodLog } from "../assets/assets";
+import { mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import Button from "../components/ui/Button";
 import { Loader2Icon, PlusIcon, SparkleIcon } from "lucide-react";
+import Input from "../components/ui/Input";
+import Select from "../components/ui/Select";
+import mockApi from "../assets/mockApi";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
@@ -27,6 +30,14 @@ const FoodLog = () => {
       (e: FoodEntry) => e.createdAt?.split("T")[0] === today,
     );
     setEntries(todaysEntries);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { data } = await mockApi.foodLogs.create({ data: formData });
+    setAllFoodLogs((prev) => [...prev, data]);
+    setFormData({ name: "", calories: 0, mealType: "" });
+    setShowForm(false);
   };
 
   const totalCalories = entries.reduce((sum, e) => sum + e.calories, 0);
@@ -107,6 +118,77 @@ const FoodLog = () => {
               </div>
             )}
           </div>
+        )}
+        {/* Add Form */}
+        {showForm && (
+          <Card className="border-2 border-emerald-200 dark:border-emerald-800">
+            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
+              New Food Entry
+            </h3>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                label="Food Name"
+                value={formData.name}
+                onChange={(v) =>
+                  setFormData({
+                    ...formData,
+                    name: v.toString(),
+                  })
+                }
+                placeholder="e.g., Grilled Chicken Salad"
+                required
+              />
+
+              <Input
+                label="Calories"
+                type="number"
+                value={formData.calories}
+                onChange={(v) =>
+                  setFormData({
+                    ...formData,
+                    calories: Number(v),
+                  })
+                }
+                placeholder="e.g., 350"
+                required
+                min={1}
+              />
+              <Select
+                label="Meal Type"
+                value={formData.mealType}
+                onChange={(v) =>
+                  setFormData({
+                    ...formData,
+                    mealType: v.toString(),
+                  })
+                }
+                options={mealTypeOptions}
+                placeholder="Select meal type"
+                required
+              />
+
+              <div className="flex gap-3 pt-2">
+                <Button
+                  className="flex-1"
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setShowForm(false);
+                    setFormData({
+                      name: "",
+                      calories: 0,
+                      mealType: "",
+                    });
+                  }}>
+                  Cancel
+                </Button>
+                <Button type="submit" className="flex-1">
+                  Add Entry
+                </Button>
+              </div>
+            </form>
+          </Card>
         )}
       </div>
     </div>
