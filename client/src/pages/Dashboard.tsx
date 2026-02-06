@@ -13,6 +13,7 @@ import {
   TrendingUpIcon,
   Zap,
 } from "lucide-react";
+import CaloriesChart from "../components/CaloriesChart";
 
 const Dashboard = () => {
   const { user, allActivityLogs, allFoodLogs } = useAppContext();
@@ -349,6 +350,14 @@ const Dashboard = () => {
               </span>
             </div>
           </div>
+        </Card>
+
+        {/* Activity & Intake Graph */}
+        <Card className="col-span-2">
+          <h3 className="font-semibold text-slate-800 dark:text-white mb-2">
+            This Week's Progress
+          </h3>
+          <CaloriesChart />
         </Card>
       </div>
     </div>
