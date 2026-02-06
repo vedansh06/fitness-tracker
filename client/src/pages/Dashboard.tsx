@@ -8,6 +8,7 @@ import {
   Activity,
   FlameIcon,
   HamburgerIcon,
+  Ruler,
   ScaleIcon,
   TrendingUpIcon,
   Zap,
@@ -223,6 +224,93 @@ const Dashboard = () => {
                 </h3>
                 <p className="text-slate-500 text-sm">Your stats</p>
               </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
+                    <ScaleIcon className="w-4 h-4 text-slate-500" />
+                  </div>
+                  <span className="text-sm text-slate-500 dark:text-slate-400">
+                    Weight
+                  </span>
+                </div>
+                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                  {user.weight} kg
+                </span>
+              </div>
+              {user.height && (
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
+                      <Ruler className="w-4 h-4 text-slate-500" />
+                    </div>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                      Height
+                    </span>
+                  </div>
+                  <span className="font-semibold text-slate-700 dark:text-slate-200">
+                    {user.height} cm
+                  </span>
+                </div>
+              )}
+
+              {user.height && (
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      BMI
+                    </span>
+                    {(() => {
+                      const bmi = (
+                        user.weight / Math.pow(user.height / 100, 2)
+                      ).toFixed(1);
+                      const getStatus = (b: number) => {
+                        if (b < 18.5)
+                          return { color: "text-blue-500", bg: "bg-blue-500" };
+
+                        if (b < 25)
+                          return {
+                            color: "text-emerald-500",
+                            bg: "bg-emerald-500",
+                          };
+
+                        if (b < 30)
+                          return {
+                            color: "text-orange-500",
+                            bg: "bg-orange-500",
+                          };
+
+                        return {
+                          color: "text-red-500",
+                          bg: "bg-red-500",
+                        };
+                      };
+                      const status = getStatus(Number(bmi));
+                      return (
+                        <span className={`text-lg font-bold ${status.color}`}>
+                          {bmi}
+                        </span>
+                      );
+                    })()}
+                  </div>
+
+                  {/* BMI Scale Visual */}
+                  <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
+                    <div className="flex-1 bg-blue-400 opacity-30"></div>
+                    <div className="flex-1 bg-emerald-400 opacity-30"></div>
+                    <div className="flex-1 bg-orange-400 opacity-30"></div>
+                    <div className="flex-1 bg-red-400 opacity-30"></div>
+                  </div>
+
+                  <div className="flex justify-between mt-1 text-[10px] text-slate-400">
+                    <span>18.5</span>
+                    <span>25</span>
+                    <span>30</span>
+                  </div>
+                </div>
+              )}
             </div>
           </Card>
         )}
