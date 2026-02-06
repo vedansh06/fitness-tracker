@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FormData } from "../types";
 import Card from "../components/ui/Card";
 import { quickActivitiesFoodLog } from "../assets/assets";
+import Button from "../components/ui/Button";
+import { Loader2Icon, PlusIcon, SparkleIcon } from "lucide-react";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
@@ -16,6 +18,7 @@ const FoodLog = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -83,6 +86,26 @@ const FoodLog = () => {
                 ))}
               </div>
             </Card>
+
+            <Button className="w-full" onClick={() => setShowForm(true)}>
+              <PlusIcon className="size-5" />
+              Add Food Entry
+            </Button>
+
+            <Button
+              className="w-full"
+              onClick={() => {
+                inputRef.current?.click();
+              }}>
+              <SparkleIcon className="size-5" />
+              AI Food Snap
+            </Button>
+            <input type="file" accept="image/*" hidden ref={inputRef} />
+            {loading && (
+              <div className="fixed inset-0 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur flex items-center justify-center z-100">
+                <Loader2Icon className="size-8 text-emerald-600  dark:text-emerald-400 animate-spin" />
+              </div>
+            )}
           </div>
         )}
       </div>
