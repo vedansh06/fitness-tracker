@@ -3,7 +3,7 @@ import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry } from "../types";
 import Card from "../components/ui/Card";
 import { quickActivities } from "../assets/assets";
-import { PlusIcon } from "lucide-react";
+import { ActivityIcon, DumbbellIcon, PlusIcon } from "lucide-react";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import toast from "react-hot-toast";
@@ -196,6 +196,36 @@ const ActivityLog = () => {
         )}
 
         {/* Activities List */}
+        {activities.length === 0 ? (
+          <Card className="text-center py-12">
+            <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+              <DumbbellIcon className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+            </div>
+            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">
+              No activities logged today
+            </h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Start moving and track your progress
+            </p>
+          </Card>
+        ) : (
+          <Card>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center ">
+                <ActivityIcon className="size-5 text-blue-600" />
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-slate-800 dark:text-white">
+                  Today's Activities
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {activities.length} logged
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );
