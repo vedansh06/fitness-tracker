@@ -20,6 +20,7 @@ import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
 import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
+import api from "../configs/api";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
@@ -46,10 +47,25 @@ const FoodLog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data } = await mockApi.foodLogs.create({ data: formData });
-    setAllFoodLogs((prev) => [...prev, data]);
-    setFormData({ name: "", calories: 0, mealType: "" });
-    setShowForm(false);
+
+    if (
+      !formData.name.trim() ||
+      !formData.calories ||
+      formData.calories <= 0 ||
+      !formData.mealType
+    ) {
+      return toast.error("Please enter valid data");
+    }
+
+    try {
+      const { data } = await api.post("/api/food-logs", { data: formData });
+      setAllFoodLogs((prev) => [...prev, data]);
+      setFormData({ name: "", calories: 0, mealType: "" });
+      setShowForm(false);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
+    }
   };
 
   const handleDelete = async (documentId: string) => {
