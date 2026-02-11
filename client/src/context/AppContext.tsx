@@ -17,7 +17,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User>(null);
-  const [isUserFetched, setIsUserFetched] = useState(false);
+  const [isUserFetched, setIsUserFetched] = useState(
+    localStorage.getItem("token") ? false : true,
+  );
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
   const [allFoodLogs, setAllFoodLogs] = useState<FoodEntry[]>([]);
   const [allActivityLogs, setAllActivityLogs] = useState<ActivityEntry[]>([]);
@@ -51,7 +53,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       }
       localStorage.setItem("token", data.jwt);
       api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
-      
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.error?.message || error?.message);
@@ -59,10 +60,19 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchUser = async (token: string) => {
-    const { data } = await mockApi.user.me();
-    setUser({ ...data.user, token });
-    if (data?.age && data?.weight && data?.goal) {
-      setOnboardingCompleted(true);
+    try {
+      const { data } = await api.get("/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUser({ ...data.user, token });
+      if (data?.age && data?.weight && data?.goal) {
+        setOnboardingCompleted(true);
+      }
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
     }
     setIsUserFetched(true);
   };
