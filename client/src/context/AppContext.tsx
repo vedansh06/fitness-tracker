@@ -99,7 +99,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       setAllActivityLogs(data);
-      
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.error?.message || error?.message);
@@ -110,6 +109,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("token");
     setUser(null);
     setOnboardingCompleted(false);
+    api.defaults.headers.common["Authorization"] = "";
     navigate("/");
   };
 
@@ -118,11 +118,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (token) {
       (async () => {
         await fetchUser(token);
-        await fetchFoodLogs();
-        await fetchActivityLogs();
+        await fetchFoodLogs(token);
+        await fetchActivityLogs(token);
       })();
-    } else {
-      setIsUserFetched(true);
     }
   }, []);
 
