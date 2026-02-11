@@ -32,7 +32,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       }
       localStorage.setItem("token", data.jwt);
       api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
-      
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.error?.message || error?.message);
@@ -40,12 +39,23 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const login = async (credentials: Credentials) => {
-    const { data } = await mockApi.auth.login(credentials);
-    setUser({ ...data.user, token: data.jwt });
-    if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
-      setOnboardingCompleted(true);
+    try {
+      const { data } = await api.post("/api/auth/local", {
+        identifier: credentials.email,
+        password: credentials.password,
+      });
+
+      setUser({ ...data.user, token: data.jwt });
+      if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
+        setOnboardingCompleted(true);
+      }
+      localStorage.setItem("token", data.jwt);
+      api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
+      
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
     }
-    localStorage.setItem("token", data.jwt);
   };
 
   const fetchUser = async (token: string) => {
