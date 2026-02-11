@@ -8,6 +8,8 @@ import {
 } from "../types";
 import { useNavigate } from "react-router-dom";
 import mockApi from "../assets/mockApi";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const AppContext = createContext(initialState);
 
@@ -21,12 +23,20 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [allActivityLogs, setAllActivityLogs] = useState<ActivityEntry[]>([]);
 
   const signup = async (credentials: Credentials) => {
-    const { data } = await mockApi.auth.register(credentials);
-    setUser(data.user);
-    if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
-      setOnboardingCompleted(true);
+    try {
+      const { data } = await api.post("/api/auth/local/register", credentials);
+
+      setUser({ ...data.user, token: data.jwt });
+      if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
+        setOnboardingCompleted(true);
+      }
+      localStorage.setItem("token", data.jwt);
+      api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
+      
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
     }
-    localStorage.setItem("token", data.jwt);
   };
 
   const login = async (credentials: Credentials) => {
