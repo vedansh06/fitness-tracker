@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
 
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const analyzeImage = async (filePath: string) => {
   try {
@@ -40,7 +40,6 @@ export const analyzeImage = async (filePath: string) => {
 
     // response.text should be valid JSON matching the schema
     return JSON.parse(response.text);
-    
   } catch (error) {
     console.log(error);
     throw error;
