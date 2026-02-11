@@ -77,14 +77,33 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setIsUserFetched(true);
   };
 
-  const fetchFoodLogs = async () => {
-    const { data } = await mockApi.foodLogs.list();
-    setAllFoodLogs(data);
+  const fetchFoodLogs = async (token: string) => {
+    try {
+      const { data } = await api.get("/api/food-logs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAllFoodLogs(data);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
+    }
   };
 
-  const fetchActivityLogs = async () => {
-    const { data } = await mockApi.activityLogs.list();
-    setAllActivityLogs(data);
+  const fetchActivityLogs = async (token: string) => {
+    try {
+      const { data } = await api.get("/api/activity-logs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAllActivityLogs(data);
+      
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.error?.message || error?.message);
+    }
   };
 
   const logout = () => {
