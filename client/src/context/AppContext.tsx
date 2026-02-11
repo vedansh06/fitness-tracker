@@ -7,7 +7,6 @@ import {
   type User,
 } from "../types";
 import { useNavigate } from "react-router-dom";
-import mockApi from "../assets/mockApi";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 
