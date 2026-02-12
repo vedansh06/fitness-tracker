@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -12,6 +13,12 @@ import { useAppContext } from "../context/AppContext";
 
 const CaloriesChart = () => {
   const { allActivityLogs, allFoodLogs } = useAppContext();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const getData = () => {
     const data = [];
@@ -47,6 +54,10 @@ const CaloriesChart = () => {
   };
 
   const data = getData();
+
+  if (!isReady) {
+    return <div className="w-full h-[300px] mt-4" />;
+  }
 
   return (
     <div className="w-full h-[300px] mt-4">

@@ -64,7 +64,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setUser({ ...data.user, token });
+      setUser({ ...data, token });
       if (data?.age && data?.weight && data?.goal) {
         setOnboardingCompleted(true);
       }

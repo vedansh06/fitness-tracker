@@ -55,13 +55,22 @@ const Profile = () => {
   }, [user]);
 
   const handleSave = async () => {
+    if (!user?.id) {
+      toast.error("User ID not found. Please log in again.");
+      setIsEditing(false);
+      return;
+    }
     try {
-      await api.put(`/api/users/${user?.id}`, formData);
+      await api.put(`/api/users/${user.id}`, formData);
       await fetchUser(user?.token || "");
       toast.success("Profile updated successfully");
     } catch (error: any) {
       console.log(error);
-      toast.error(error?.message || "Failed to update profile");
+      toast.error(
+        error?.response?.data?.error?.message ||
+          error?.message ||
+          "Failed to update profile",
+      );
     }
     setIsEditing(false);
   };
