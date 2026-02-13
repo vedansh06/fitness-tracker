@@ -1,5 +1,7 @@
-module.exports = (plugin) => {
-  plugin.controllers.user.updateMe = async (ctx) => {
+import { Context } from "koa";
+
+export default {
+  async update(ctx: Context) {
     const user = ctx.state.user;
 
     if (!user) {
@@ -15,6 +17,7 @@ module.exports = (plugin) => {
     delete data.blocked;
     delete data.resetPasswordToken;
     delete data.confirmationToken;
+    delete data.password;
 
     try {
       const updatedUser = await strapi.entityService.update(
@@ -28,32 +31,11 @@ module.exports = (plugin) => {
         resetPasswordToken,
         confirmationToken,
         ...sanitizedUser
-      } = updatedUser;
+      } = updatedUser as any;
 
       ctx.body = sanitizedUser;
-    } catch (error) {
-      ctx.badRequest("Failed to update profile", { error: error.message });
+    } catch (error: any) {
+      ctx.throw(400, "Failed to update profile: " + error.message);
     }
-  };
-
-  plugin.routes["content-api"].routes.push({
-    method: "PUT",
-    path: "/users/me",
-    handler: "user.updateMe",
-    config: {
-      prefix: "",
-      policies: [],
-    },
-  });
-
-  plugin.routes["content-api"].routes.unshift({
-    method: "PUT",
-    path: "/user/me",
-    handler: "user.updateMe",
-    config: {
-      prefix: "",
-    },
-  });
-
-  return plugin;
+  },
 };

@@ -61,7 +61,7 @@ const Profile = () => {
       return;
     }
     try {
-      await api.put("/api/users/me", formData);
+      await api.put("/api/user-profile/update", formData);
       await fetchUser(user?.token || "");
       toast.success("Profile updated successfully");
     } catch (error: any) {

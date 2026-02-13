@@ -60,7 +60,7 @@ const Onboarding = () => {
       localStorage.setItem("fitnessUser", JSON.stringify(userData));
 
       try {
-        await api.put("/api/users/me", userData);
+        await api.put("/api/user-profile/update", userData);
         toast.success("Profile updated successfully!");
         setOnboardingCompleted(true);
         fetchUser(user?.token || "");
