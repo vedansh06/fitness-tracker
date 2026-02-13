@@ -6,7 +6,7 @@ export default {
     const file = ctx.request.files?.image as any;
     if (!file) return ctx.badRequest("No image uploaded");
 
-    const filePath = file.filePath;
+    const filePath = file.filepath || file.path;
 
     try {
       const result = await analyzeImage(filePath);
