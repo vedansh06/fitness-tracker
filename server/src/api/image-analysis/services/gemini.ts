@@ -1,18 +1,31 @@
 import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
+import path from "path";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const analyzeImage = async (filePath: string) => {
   try {
-    const base64ImageFile = fs.readFileSync("path/to/small-sample.jpg", {
+    // Read the actual uploaded file
+    const base64ImageFile = fs.readFileSync(filePath, {
       encoding: "base64",
     });
+
+    // Determine mime type from file extension
+    const ext = path.extname(filePath).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".webp": "image/webp",
+    };
+    const mimeType = mimeTypes[ext] || "image/jpeg";
 
     const contents = [
       {
         inlineData: {
-          mimeType: "image/jpeg",
+          mimeType: mimeType,
           data: base64ImageFile,
         },
       },
