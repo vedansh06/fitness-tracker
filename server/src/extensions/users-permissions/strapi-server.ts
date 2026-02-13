@@ -46,5 +46,14 @@ module.exports = (plugin) => {
     },
   });
 
+  plugin.routes["content-api"].routes.unshift({
+    method: "PUT",
+    path: "/user/me",
+    handler: "user.updateMe",
+    config: {
+      prefix: "",
+    },
+  });
+
   return plugin;
 };
